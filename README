@@ -12,6 +12,8 @@ scheduling of tests on the various hosts / gateways that are being monitored.
 The hosts being monitored should be running the scheduler agent with a list of
 supported tests configured on them.
 
+This was developed as part of the RoCNet project - https://tta-portal.misc.kth.se/rocnet
+
 Please refer to the README's within the 'roc_agent' and 'roc_server'
 sub-directories for more details on configuring and running the scheduler agent
 and server.
