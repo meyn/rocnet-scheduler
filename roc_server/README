@@ -1,0 +1,97 @@
+ _____________________________________
+|  _____        _____ _   _      _    |
+| |  __ \      / ____| \ | |    | |   |
+| | |__) |___ | |    |  \| | ___| |_  |
+| |  _  // _ \| |    | . ` |/ _ \ __| |
+| | | \ \ (_) | |____| |\  |  __/ |_  |
+| |_|  \_\___/ \_____|_| \_|\___|\__| |
+ -------------------------------------
+
+This README describes the 'roc_server' scheduler that should be run on
+the server that will perform the scheduled network performance measurement
+testing on different end hosts.
+
+The list of hosts to be monitored and the list of tests to be performed are
+maintained in a sqlite3 database tables. The structure of the database is
+outlined in the 'Description' section below.
+
+Compilation & Packaging
+=======================
+Dependency: Please note that this scheduling server requires the 'sqlite3'
+library for compilation. On Ubuntu based systems this would be 'libsqlite3-dev'
+package. This should be installed prior to compiling the 'roc_server'.
+
+The Makefile included in this directory may be used to build the 'roc_server'
+executable. This is done with 'make' or 'make all' command, which creates the 
+'roc_server' executable within the bin sub-directory here.
+
+Execution
+=========
+The 'roc_server' executable accepts the following 2 arguments,
+-h # display help information
+-d # this is a required option specifying the path to the sqlite3 database file
+-D # run the scheduling server as a daemon in the background
+
+As mentioned above the roc_server requires a sqlite3 database which should be
+created prior to using it.
+A sample sqlite3 database is available in the 'db' sub-directory here which
+also includes files to create the tables required by the scheduler and add some
+dummy data to them (the tools mentioned below may also be used to manipulate the
+sqlite3 database).
+
+Database
+========
+The scheduler server uses a sqlite3 database to store the hosts to be tested 
+and the list of tests to be run.
+
+The database schema is shown below,
+ _____________                    _____________   _____________   _____________
+|  testItems  |                  |    hosts    | |  hostIfs    | | hostRunInfo |
+|-------------|                  |-------------| |-------------| |-------------|
+|  id         |                  | id          | |  id         | | hostId      |
+|  key        |                  | name        | |  hostId     | | lastStart   |
+|  duration   |                  | rptInterval | |  ipv4       |  -------------
+|  srvSetup   |                   -------------  |  dns        |
+ -------------                                   |  port       |  
+                                                  -------------
+                  _____________
+                 | testHostMap |
+                 |-------------|
+                 |  testId     |
+                 |  hostId     |
+                  -------------
+
+The 'testItems' table contains a list of test keys that should be supported by
+the scheduler. The 'hosts' table contains the list of host names and interval
+after which the tests should be run again. The 'hostIfs' table contains a list
+of interfaces linked to each host that may be individually tested by the
+scheduler. The 'hostRunInfo' table maintains the information about the last
+successful time (UNIX epoch) a host was tested.
+
+Finally the 'testHostMap' contains a mapping of test items to host. This allows
+flexibility in executing tests on some hosts while ignoring them on others.
+
+Database tools
+--------------
+Several different tools may be used to manipulate the sqlite3 database file.
+These include,
+1. sqlite3 (CLI) - this is a command line tool to view/modify the sqlite3
+                   database (sudo apt-get sqlite3).
+2. SQLiteManager (Firefox plugin) - this is a GUI tool that may be downloaded
+                                    as an Add-on for the Firefox web browser.
+
+
+Example steps
+=============
+1. Create the database using the 'sqlite3' tool,
+  roc_server $ sqlite3 <dbfilename.sqlite>
+
+2. Create the tables using the table definitions file in the db directory,
+  sqlite3> .read db/table_defs.sql
+
+3. Use the initial data from dummyData.sql,
+  sqlite3> .read db/dummyData.sql
+  sqlite3> .exit
+
+3. Finally start the scheduler 'roc_server' with the above created database,
+  roc_server $ ./bin/roc_server -d <dbfilename.sqlite>

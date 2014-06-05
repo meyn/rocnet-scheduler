@@ -1,0 +1,34 @@
+Compilation and packaging
+=========================
+To create the roc_agent Bifrost Linux package execute 'make bipkg'. This
+creates a zipped tar archive of the 'rocnet' package that can be installed on
+hosts that need to be monitored. This includes the 'roc_agent' executable along
+with sample configuration files, test scripts and a rc.rocnet start/stop script.
+The package is organized in the following manner,
+
+opt/
+|
+--/rocnet/
+  |
+  --/etc/
+  | |
+  | -- roc_agent_eth4.conf
+  | |
+  | -- roc_agent_eth5.conf
+  |
+  --/tests/
+  | |
+  | -- icmp.sh*
+  | |
+  | -- tcpdown.sh*
+  | |
+  | -- tcpup.sh*
+  | |
+  | -- udpdown.sh*
+  |
+  --/sbin/
+    |
+    -- roc_agent*
+
+To create only the 'roc_agent' executable, execute 'make all' which compiles
+and creates a static executable 'roc_agent' in the sbin sub-directory here.

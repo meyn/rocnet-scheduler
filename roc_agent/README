@@ -1,0 +1,49 @@
+ _____________________________________
+|  _____        _____ _   _      _    |
+| |  __ \      / ____| \ | |    | |   |
+| | |__) |___ | |    |  \| | ___| |_  |
+| |  _  // _ \| |    | . ` |/ _ \ __| |
+| | | \ \ (_) | |____| |\  |  __/ |_  |
+| |_|  \_\___/ \_____|_| \_|\___|\__| |
+ -------------------------------------
+
+This document describes the 'roc_agent' that is to be run on hosts which need
+to have their network performance measured periodically.
+
+
+Execution
+=========
+The 'roc_agent' is the executable that should be run on the host(s) that will be
+monitored by the scheduler. It accepts the following arguments,
+-v # display version information
+-h # display usage information
+-c path/to/config/file # to specify a configuration file to set agent options
+                       # please refer to the 'roc_agent*.conf' files in the etc
+                       # directory for information on the available options
+-D # to run the agent as a UNIX daemon
+
+
+Test scripts
+============
+Available test scripts (shell scripts) are placed in the etc/tests directory of
+the package. The scripts peform a specified test and send the results of the
+specific test to the Zabbix server via the 'zabbix_sender' utility making use
+of the Zabbix configuration file to determine the Zabbix server.
+
+To add a new test on the host, add a test script that performs the test and is
+capable of sending its results to the Zabbix server. Then add the TestItem
+key-to-script mapping in the configuration file via the 'TestItem=' directive.
+Note: The test should also be configured on the scheduler server for it to be
+invoked from the scheduler server.
+
+
+Description
+===========
+The 'roc_agent' executable parses the configuration file at startup to determine
+the IP and port (among other parameters) to start listening on. It then waits
+for a connection and on receipt of one expects a 'TestItem' key which should
+be mapped to a test script that performs a test and sends the results of the
+test on to the Zabbix (monitoring) server.
+
+To run the agent on another interface, just clone one of the roc_agent_*.conf
+files and modify the 'Interface=' directive.

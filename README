@@ -1,0 +1,17 @@
+ _____________________________________
+|  _____        _____ _   _      _    |
+| |  __ \      / ____| \ | |    | |   |
+| | |__) |___ | |    |  \| | ___| |_  |
+| |  _  // _ \| |    | . ` |/ _ \ __| |
+| | | \ \ (_) | |____| |\  |  __/ |_  |
+| |_|  \_\___/ \_____|_| \_|\___|\__| |
+ -------------------------------------
+
+The RoCNet scheduler framework includes a scheduling server that controls the
+scheduling of tests on the various hosts / gateways that are being monitored.
+The hosts being monitored should be running the scheduler agent with a list of
+supported tests configured on them.
+
+Please refer to the README's within the 'roc_agent' and 'roc_server'
+sub-directories for more details on configuring and running the scheduler agent
+and server.

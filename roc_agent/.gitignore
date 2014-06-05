@@ -1,0 +1,26 @@
+sbin/*
+
+# Object files
+*.o
+*.ko
+*.obj
+
+# Dependency files
+*.d
+
+# Libraries
+*.lib
+*.a
+
+# Shared objects (inc. Windows DLLs)
+*.so
+*.so.*
+*.dylib
+
+# Databases
+*.db
+
+# Executables
+*.exe
+*.out
+*.app
